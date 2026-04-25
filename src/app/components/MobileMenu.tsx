@@ -35,7 +35,7 @@ export function MobileMenu({ activeItem = 'products' }: MobileMenuProps) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="lg:hidden p-2 text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+        className="lg:hidden p-2 text-[var(--premium-coffee)] hover:bg-[var(--premium-surface-soft)] rounded-lg transition-colors"
       >
         <Menu className="w-6 h-6" />
       </button>
@@ -47,17 +47,17 @@ export function MobileMenu({ activeItem = 'products' }: MobileMenuProps) {
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="fixed top-0 left-0 h-full w-64 bg-neutral-50 z-50 lg:hidden shadow-2xl flex flex-col animate-slide-in">
-            <div className="flex items-center justify-between p-6 border-b border-neutral-200">
+          <div className="fixed top-0 left-0 h-full w-64 bg-[var(--sidebar)] z-50 lg:hidden shadow-2xl flex flex-col animate-slide-in">
+            <div className="flex items-center justify-between p-6 border-b border-[var(--sidebar-border)]">
               <div className="flex flex-col gap-1">
-                <h1 className="text-xl tracking-tight text-neutral-900">MOBILI</h1>
-                <p className="text-xs text-neutral-500 tracking-wide">ESTOFADOS</p>
+                <h1 className="text-xl tracking-tight text-[var(--sidebar-foreground)]">BETEL</h1>
+                <p className="text-xs text-[var(--color-muted-foreground)] tracking-wide">INTERIORES</p>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-neutral-200 rounded-lg transition-colors"
+                className="p-2 hover:bg-[var(--sidebar-accent)] rounded-lg transition-colors"
               >
-                <X className="w-5 h-5 text-neutral-700" />
+                <X className="w-5 h-5 text-[var(--premium-coffee)]" />
               </button>
             </div>
 
@@ -74,8 +74,8 @@ export function MobileMenu({ activeItem = 'products' }: MobileMenuProps) {
                         className={`
                           w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors
                           ${isActive
-                            ? 'bg-white text-neutral-900 shadow-sm'
-                            : 'text-neutral-600 hover:bg-white/50 hover:text-neutral-900'
+                            ? 'bg-[var(--premium-surface-raised)] text-[var(--color-foreground)] shadow-sm'
+                            : 'text-[var(--color-muted-foreground)] hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]'
                           }
                         `}
                       >

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar';
-import { MobileMenu } from './components/MobileMenu';
 import { Header } from './components/Header';
 import { Input } from './components/Input';
 import { Textarea } from './components/Textarea';
@@ -11,34 +10,53 @@ import { RichTextEditor } from './components/RichTextEditor';
 import { ImageUpload } from './components/ImageUpload';
 import { ProgressIndicator } from './components/ProgressIndicator';
 import { ValidationMessage } from './components/ValidationMessage';
-import { FormCard } from './components/FormCard';
 import { Tooltip } from './components/Tooltip';
-import { Package, DollarSign, FileText, Image, ShieldCheck, Box, FolderTree, Info, Sparkles } from 'lucide-react';
+import { NumberStepper } from './components/NumberStepper';
+import {
+  Package,
+  DollarSign,
+  FileText,
+  Image,
+  ShieldCheck,
+  Box,
+  FolderTree,
+  Info,
+  Sparkles
+} from 'lucide-react';
+
+const mockedProductImages = [
+  { src: '/images/poltrona01.webp', alt: 'Poltrona Queen Elisabeth em destaque' },
+  { src: '/images/poltrona02.webp', alt: 'Vista lateral da Poltrona Queen Elisabeth' },
+  { src: '/images/poltrona03.webp', alt: 'Detalhe do acabamento da Poltrona Queen Elisabeth' },
+  { src: '/images/poltrona04.webp', alt: 'Poltrona Queen Elisabeth em ambiente decorado' },
+  { src: '/images/poltrona05.webp', alt: 'Detalhe do tecido da Poltrona Queen Elisabeth' },
+  { src: '/images/poltrona06.webp', alt: 'Vista posterior da Poltrona Queen Elisabeth' }
+];
 
 export default function App() {
   const [formData, setFormData] = useState({
-    productName: '',
-    slug: '',
-    sku: '',
-    barcode: '',
-    fiscalClass: '',
-    salePrice: '',
-    promotionalPrice: '',
-    shortDescription: '',
-    fullDescription: '',
+    productName: 'Poltrona Queen Elisabeth',
+    slug: 'poltrona-queen-elisabeth',
+    sku: 'POL-QUEEN-ELI-001',
+    barcode: '7897133224235',
+    fiscalClass: '94016100',
+    salePrice: 'R$ 2.489,90',
+    promotionalPrice: 'R$ 2.199,90',
+    shortDescription: 'Poltrona Queen Elisabeth com design clássico, encosto confortável e acabamento premium para salas de estar.',
+    fullDescription: 'Poltrona Queen Elisabeth com estrutura reforçada em madeira, espuma de alta densidade e revestimento em tecido premium. Indicada para salas de estar, quartos e espaços de leitura que precisam unir conforto, presença visual e durabilidade.',
     isActive: true,
     controlStock: true,
-    stockQuantity: '',
-    minAlert: '',
-    weight: '',
-    height: '',
-    width: '',
-    depth: '',
+    stockQuantity: '12',
+    minAlert: '3',
+    weight: '28',
+    height: '98',
+    width: '86',
+    depth: '92',
     brand: 'mobili',
     warranty: '12',
     categories: {
       sofas: false,
-      poltronas: false,
+      poltronas: true,
       puffs: false,
       mesasCentro: false,
       cadeiras: false,
@@ -51,8 +69,8 @@ export default function App() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
-  // Auto-gerar slug a partir do nome do produto
   useEffect(() => {
     if (formData.productName && !touched.slug) {
       const slug = formData.productName
@@ -61,6 +79,7 @@ export default function App() {
         .replace(/[\u0300-\u036f]/g, '')
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
+
       setFormData(prev => ({ ...prev, slug }));
     }
   }, [formData.productName, touched.slug]);
@@ -68,6 +87,9 @@ export default function App() {
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setTouched(prev => ({ ...prev, [field]: true }));
+    setHasUnsavedChanges(true);
+    setShowSuccessMessage(false);
+
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
@@ -78,51 +100,87 @@ export default function App() {
       ...prev,
       categories: { ...prev.categories, [category]: checked }
     }));
+    setTouched(prev => ({ ...prev, categories: true }));
+    setHasUnsavedChanges(true);
+    setShowSuccessMessage(false);
+
+    if (errors.categories) {
+      setErrors(prev => ({ ...prev, categories: '' }));
+    }
   };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
+    const hasSelectedCategory = Object.values(formData.categories).some(Boolean);
 
     if (!formData.productName.trim()) {
       newErrors.productName = 'Nome do produto é obrigatório';
     }
+
     if (!formData.slug.trim()) {
       newErrors.slug = 'Slug é obrigatório';
     }
+
     if (!formData.sku.trim()) {
       newErrors.sku = 'SKU é obrigatório';
     }
+
     if (!formData.salePrice.trim()) {
       newErrors.salePrice = 'Preço de venda é obrigatório';
     }
+
     if (!formData.shortDescription.trim()) {
       newErrors.shortDescription = 'Resumo curto é obrigatório';
+    }
+
+    if (!hasSelectedCategory) {
+      newErrors.categories = 'Selecione pelo menos uma categoria para organizar o produto na loja.';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const isSaveDisabled = !formData.productName.trim() ||
-                         !formData.slug.trim() ||
-                         !formData.sku.trim() ||
-                         !formData.salePrice.trim() ||
-                         !formData.shortDescription.trim();
+  const hasSelectedCategory = Object.values(formData.categories).some(Boolean);
+
+  const isSaveDisabled =
+    !formData.productName.trim() ||
+    !formData.slug.trim() ||
+    !formData.sku.trim() ||
+    !formData.salePrice.trim() ||
+    !formData.shortDescription.trim() ||
+    !hasSelectedCategory;
 
   const handleSave = () => {
     if (validateForm()) {
       console.log('Produto salvo:', formData);
+      setHasUnsavedChanges(false);
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 5000);
     }
   };
 
-  // Calcular progresso do formulário
-  const requiredFields = ['productName', 'slug', 'sku', 'salePrice', 'shortDescription'];
-  const filledRequiredFields = requiredFields.filter(field =>
-    formData[field as keyof typeof formData] &&
-    String(formData[field as keyof typeof formData]).trim() !== ''
-  ).length;
+  const requiredChecklist = [
+    { key: 'productName', label: 'Nome do produto', done: Boolean(formData.productName.trim()) },
+    { key: 'slug', label: 'URL amigável', done: Boolean(formData.slug.trim()) },
+    { key: 'sku', label: 'SKU interno', done: Boolean(formData.sku.trim()) },
+    { key: 'salePrice', label: 'Preço de venda', done: Boolean(formData.salePrice.trim()) },
+    { key: 'shortDescription', label: 'Resumo curto', done: Boolean(formData.shortDescription.trim()) },
+    { key: 'categories', label: 'Categoria selecionada', done: hasSelectedCategory }
+  ];
+
+  const filledRequiredFields = requiredChecklist.filter(item => item.done).length;
+  const missingRequiredItems = requiredChecklist.filter(item => !item.done);
+  const saveDisabledReason = missingRequiredItems.length
+    ? `Falta preencher: ${missingRequiredItems.map(item => item.label).join(', ')}.`
+    : '';
+
+  const stockQuantityNumber = Number.parseInt(formData.stockQuantity || '0', 10);
+  const minAlertNumber = Number.parseInt(formData.minAlert || '0', 10);
+  const currentStock = Number.isNaN(stockQuantityNumber) ? 0 : stockQuantityNumber;
+  const minimumStock = Number.isNaN(minAlertNumber) ? 0 : minAlertNumber;
+  const hasLowStockAlert = formData.controlStock && minimumStock > 0 && currentStock <= minimumStock;
+  const hasHealthyStock = formData.controlStock && minimumStock > 0 && currentStock > minimumStock;
 
   const handleCancel = () => {
     if (confirm('Deseja realmente cancelar? As alterações não salvas serão perdidas.')) {
@@ -130,9 +188,18 @@ export default function App() {
     }
   };
 
+  const cardClass =
+    'bg-[var(--premium-surface)] rounded-2xl border border-[var(--color-border)] p-6 shadow-[var(--premium-shadow-soft)] [box-shadow:var(--premium-shadow-soft),var(--premium-inset)]';
+
+  const iconClass = 'w-5 h-5 text-[var(--primary)]';
+
+  const titleClass =
+    'text-base text-[var(--color-foreground)] font-semibold tracking-tight';
+
+  const mutedTextClass = 'text-[var(--color-muted-foreground)]';
+
   return (
-    <div className="min-h-screen bg-neutral-100">
-      {/* Desktop Sidebar */}
+    <div className="min-h-screen bg-[var(--color-background)]">
       <div className="hidden lg:block">
         <Sidebar activeItem="products" />
       </div>
@@ -142,6 +209,7 @@ export default function App() {
           onCancel={handleCancel}
           onSave={handleSave}
           isSaveDisabled={isSaveDisabled}
+          saveDisabledReason={saveDisabledReason}
         />
 
         <main className="p-4 md:p-8">
@@ -154,19 +222,29 @@ export default function App() {
             </div>
           )}
 
+          <div className="max-w-7xl mx-auto mb-4 md:mb-6">
+            <ValidationMessage
+              type={hasUnsavedChanges ? 'warning' : 'success'}
+              message={
+                hasUnsavedChanges
+                  ? 'Existem alterações ainda não salvas. Revise os itens obrigatórios e clique em Salvar produto.'
+                  : 'Cadastro pré-preenchido com dados mockados da Poltrona Queen Elisabeth. Todos os campos obrigatórios estão prontos para revisão.'
+              }
+            />
+          </div>
+
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
             <div className="lg:col-span-2 space-y-4 md:space-y-6">
-              {/* INFORMAÇÕES DO PRODUTO */}
-              <section className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+              <section className={cardClass}>
                 <div className="flex items-center gap-2 mb-4">
-                  <Package className="w-5 h-5 text-[#B89B7C]" />
-                  <h2 className="text-base text-neutral-900">INFORMAÇÕES DO PRODUTO</h2>
+                  <Package className={iconClass} />
+                  <h2 className={titleClass}>INFORMAÇÕES DO PRODUTO</h2>
                 </div>
 
                 <div className="space-y-4">
                   <Input
                     label="Nome do produto"
-                    placeholder="Ex: Poltrona Giratória e Puff Decorativos Costela"
+                    placeholder="Ex: Poltrona Queen Elisabeth"
                     required
                     value={formData.productName}
                     onChange={(e) => handleInputChange('productName', e.target.value)}
@@ -177,27 +255,36 @@ export default function App() {
                     <div>
                       <Input
                         label="Slug (URL amigável)"
-                        placeholder="poltrona-giratoria-puff-decorativos-costela"
+                        placeholder="poltrona-queen-elisabeth"
                         required
                         value={formData.slug}
                         onChange={(e) => handleInputChange('slug', e.target.value)}
                         error={errors.slug}
                       />
+
                       {formData.slug && !touched.slug && (
-                        <div className="flex items-center gap-1 mt-1.5 text-xs text-neutral-500">
-                          <Sparkles className="w-3 h-3" />
+                        <div className={`flex items-center gap-1 mt-1.5 text-xs ${mutedTextClass}`}>
+                          <Sparkles className="w-3 h-3 text-[var(--primary)]" />
                           <span>Gerado automaticamente</span>
                         </div>
                       )}
                     </div>
+
                     <div>
                       <div className="flex items-center gap-2 mb-2">
-                        <label className="text-sm text-neutral-700">
+                        <label className="text-sm text-[var(--premium-coffee)]">
                           SKU (Código interno)
-                          <span className="text-red-500 ml-1">*</span>
                         </label>
+                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                          formData.sku.trim()
+                            ? 'bg-[var(--premium-olive)]/15 text-[var(--premium-olive)]'
+                            : 'bg-[var(--destructive)]/10 text-[var(--destructive)]'
+                        }`}>
+                          Obrigatório
+                        </span>
                         <Tooltip content="Código único de identificação do produto no estoque" />
                       </div>
+
                       <Input
                         placeholder="POLTR-001"
                         required
@@ -211,20 +298,27 @@ export default function App() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <div className="flex items-center gap-2 mb-2">
-                        <label className="text-sm text-neutral-700">Código de barras (EAN)</label>
+                        <label className="text-sm text-[var(--premium-coffee)]">
+                          Código de barras (EAN)
+                        </label>
                         <Tooltip content="Código internacional do produto (13 dígitos)" />
                       </div>
+
                       <Input
                         placeholder="7897133224235"
                         value={formData.barcode}
                         onChange={(e) => handleInputChange('barcode', e.target.value)}
                       />
                     </div>
+
                     <div>
                       <div className="flex items-center gap-2 mb-2">
-                        <label className="text-sm text-neutral-700">Classe fiscal (NCM)</label>
+                        <label className="text-sm text-[var(--premium-coffee)]">
+                          Classe fiscal (NCM)
+                        </label>
                         <Tooltip content="Nomenclatura Comum do Mercosul para fins fiscais" />
                       </div>
+
                       <Input
                         placeholder="94016100"
                         value={formData.fiscalClass}
@@ -235,11 +329,10 @@ export default function App() {
                 </div>
               </section>
 
-              {/* PREÇOS */}
-              <section className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+              <section className={cardClass}>
                 <div className="flex items-center gap-2 mb-4">
-                  <DollarSign className="w-5 h-5 text-[#B89B7C]" />
-                  <h2 className="text-base text-neutral-900">PREÇOS</h2>
+                  <DollarSign className={iconClass} />
+                  <h2 className={titleClass}>PREÇOS</h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -251,6 +344,7 @@ export default function App() {
                     onChange={(e) => handleInputChange('salePrice', e.target.value)}
                     error={errors.salePrice}
                   />
+
                   <Input
                     label="Preço promocional"
                     placeholder="R$ 1.439,90"
@@ -261,11 +355,10 @@ export default function App() {
                 </div>
               </section>
 
-              {/* DESCRIÇÃO */}
-              <section className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+              <section className={cardClass}>
                 <div className="flex items-center gap-2 mb-4">
-                  <FileText className="w-5 h-5 text-[#B89B7C]" />
-                  <h2 className="text-base text-neutral-900">DESCRIÇÃO</h2>
+                  <FileText className={iconClass} />
+                  <h2 className={titleClass}>DESCRIÇÃO</h2>
                 </div>
 
                 <div className="space-y-4">
@@ -285,48 +378,81 @@ export default function App() {
                     value={formData.fullDescription}
                     onChange={(value) => handleInputChange('fullDescription', value)}
                     maxCharacters={2000}
-                    placeholder="Poltrona giratória com base metálica e revestimento em tecido de alta qualidade. Ideal para salas de estar, quartos e escritórios. Proporciona conforto, estilo e durabilidade para o seu ambiente."
+                    placeholder="Poltrona Queen Elisabeth com estrutura reforçada, acabamento premium e design clássico."
                   />
                 </div>
               </section>
 
-              {/* IMAGENS DO PRODUTO */}
-              <section className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+              <section className={cardClass}>
                 <div className="flex items-center gap-2 mb-4">
-                  <Image className="w-5 h-5 text-[#B89B7C]" />
-                  <h2 className="text-base text-neutral-900">IMAGENS DO PRODUTO</h2>
+                  <Image className={iconClass} />
+                  <h2 className={titleClass}>IMAGENS DO PRODUTO</h2>
                 </div>
 
                 <div className="mb-3">
-                  <p className="text-sm text-neutral-900 mb-1">Imagem principal</p>
-                  <p className="text-xs text-neutral-500">
+                  <p className="text-sm text-[var(--color-foreground)] mb-1">
+                    Imagem principal
+                  </p>
+                  <p className={`text-xs ${mutedTextClass}`}>
                     Essa será a imagem exibida na listagem e vitrine.
                   </p>
                 </div>
 
-                <ImageUpload />
+                <ImageUpload initialImages={mockedProductImages} />
 
-                <div className="mt-4 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
-                  <p className="text-xs text-neutral-700">
+                <div className="mt-4 p-3 bg-[var(--premium-surface-soft)] rounded-xl border border-[var(--color-border)]">
+                  <p className="text-xs text-[var(--color-foreground)]">
                     <strong>Imagens adicionais</strong>
                   </p>
-                  <p className="text-xs text-neutral-500 mt-1">
+                  <p className={`text-xs mt-1 ${mutedTextClass}`}>
                     Adicione até 6 imagens para mostrar mais detalhes do produto.
                   </p>
                 </div>
               </section>
             </div>
 
-            {/* SIDEBAR DIREITA */}
             <div className="space-y-4 md:space-y-6 lg:sticky lg:top-24 lg:self-start">
-              {/* PROGRESSO */}
-              <ProgressIndicator current={filledRequiredFields} total={requiredFields.length} />
+              <ProgressIndicator current={filledRequiredFields} total={requiredChecklist.length} />
 
-              {/* STATUS DO PRODUTO */}
-              <section className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+              <section className={cardClass}>
                 <div className="flex items-center gap-2 mb-4">
-                  <ShieldCheck className="w-5 h-5 text-[#B89B7C]" />
-                  <h2 className="text-base text-neutral-900">STATUS DO PRODUTO</h2>
+                  <Image className={iconClass} />
+                  <h2 className={titleClass}>PRÉ-VISUALIZAÇÃO</h2>
+                </div>
+
+                <div className="overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--premium-surface-soft)] shadow-[0_14px_30px_rgba(74,52,43,0.12)]">
+                  <div className="flex h-64 items-center justify-center bg-[radial-gradient(circle_at_center,#fcf6ee_0%,#eadccd_72%)] p-2">
+                    <img
+                      src={mockedProductImages[0].src}
+                      alt={mockedProductImages[0].alt}
+                      className="max-h-full w-[116%] max-w-none object-contain drop-shadow-[0_18px_18px_rgba(74,52,43,0.18)]"
+                    />
+                  </div>
+                  <div className="p-4 space-y-2">
+                    <div>
+                      <p className="text-sm font-semibold text-[var(--color-foreground)]">
+                        {formData.productName || 'Nome do produto'}
+                      </p>
+                      <p className={`text-xs ${mutedTextClass}`}>
+                        SKU: {formData.sku || 'não informado'}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-[var(--primary)] font-semibold">
+                        {formData.promotionalPrice || formData.salePrice || 'Preço não informado'}
+                      </span>
+                      <span className={mutedTextClass}>
+                        {formData.stockQuantity || 0} em estoque
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className={cardClass}>
+                <div className="flex items-center gap-2 mb-4">
+                  <ShieldCheck className={iconClass} />
+                  <h2 className={titleClass}>STATUS DO PRODUTO</h2>
                 </div>
 
                 <div className="space-y-4">
@@ -336,6 +462,7 @@ export default function App() {
                     checked={formData.isActive}
                     onChange={(e) => handleInputChange('isActive', e.target.checked)}
                   />
+
                   <Toggle
                     label="Controlar estoque"
                     description="Habilita para gerenciar o estoque deste produto."
@@ -345,40 +472,65 @@ export default function App() {
                 </div>
               </section>
 
-              {/* ESTOQUE */}
-              <section className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+              <section className={cardClass}>
                 <div className="flex items-center gap-2 mb-4">
-                  <Box className="w-5 h-5 text-[#B89B7C]" />
-                  <h2 className="text-base text-neutral-900">ESTOQUE</h2>
+                  <Box className={iconClass} />
+                  <h2 className={titleClass}>ESTOQUE</h2>
                 </div>
 
                 <div className="space-y-4">
-                  <Input
+                  {hasLowStockAlert && (
+                    <ValidationMessage
+                      type="warning"
+                      message={`Estoque baixo: há ${currentStock} unidade(s), e o alerta mínimo está configurado para ${minimumStock}. Considere repor antes de publicar promoções.`}
+                    />
+                  )}
+
+                  {hasHealthyStock && (
+                    <ValidationMessage
+                      type="success"
+                      message={`Estoque confortável: ${currentStock} unidade(s) disponíveis, acima do alerta mínimo de ${minimumStock}.`}
+                    />
+                  )}
+
+                  <NumberStepper
                     label="Quantidade em estoque"
-                    type="number"
-                    placeholder="20"
                     value={formData.stockQuantity}
-                    onChange={(e) => handleInputChange('stockQuantity', e.target.value)}
+                    onChange={(value) => handleInputChange('stockQuantity', value)}
                   />
-                  <Input
+
+                  <NumberStepper
                     label="Alerta mínimo"
-                    type="number"
-                    placeholder="5"
                     value={formData.minAlert}
-                    onChange={(e) => handleInputChange('minAlert', e.target.value)}
+                    onChange={(value) => handleInputChange('minAlert', value)}
                     helperText="Receba um alerta quando o estoque atingir este nível."
                   />
                 </div>
               </section>
 
-              {/* CATEGORIAS */}
-              <section className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+              <section className={`${cardClass} ${hasSelectedCategory ? 'border-[var(--premium-olive)]' : 'border-[var(--destructive)]/60'}`}>
                 <div className="flex items-center gap-2 mb-4">
-                  <FolderTree className="w-5 h-5 text-[#B89B7C]" />
-                  <h2 className="text-base text-neutral-900">CATEGORIAS</h2>
+                  <FolderTree className={iconClass} />
+                  <h2 className={titleClass}>CATEGORIAS</h2>
                 </div>
 
-                <p className="text-xs text-neutral-600 mb-3">Selecione as categorias *</p>
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <p className={`text-xs ${mutedTextClass}`}>
+                    Selecione pelo menos uma categoria
+                  </p>
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                    hasSelectedCategory
+                      ? 'bg-[var(--premium-olive)]/15 text-[var(--premium-olive)]'
+                      : 'bg-[var(--destructive)]/10 text-[var(--destructive)]'
+                  }`}>
+                    {hasSelectedCategory ? 'Completo' : 'Obrigatório'}
+                  </span>
+                </div>
+                {errors.categories && (
+                  <div className="mb-3">
+                    <ValidationMessage type="error" message={errors.categories} />
+                  </div>
+                )}
 
                 <div className="space-y-2 mb-3">
                   <Checkbox
@@ -423,16 +575,15 @@ export default function App() {
                   />
                 </div>
 
-                <button className="text-xs text-[#B89B7C] hover:underline">
+                <button className="text-xs text-[var(--primary)] hover:opacity-80 transition">
                   Gerenciar categorias →
                 </button>
               </section>
 
-              {/* INFORMAÇÕES ADICIONAIS */}
-              <section className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+              <section className={cardClass}>
                 <div className="flex items-center gap-2 mb-4">
-                  <Info className="w-5 h-5 text-[#B89B7C]" />
-                  <h2 className="text-base text-neutral-900">INFORMAÇÕES ADICIONAIS</h2>
+                  <Info className={iconClass} />
+                  <h2 className={titleClass}>INFORMAÇÕES ADICIONAIS</h2>
                 </div>
 
                 <div className="space-y-4">
@@ -445,9 +596,10 @@ export default function App() {
                   />
 
                   <div>
-                    <label className="block text-sm text-neutral-700 mb-2">
+                    <label className="block text-sm text-[var(--premium-coffee)] mb-2">
                       Dimensões (cm)
                     </label>
+
                     <div className="grid grid-cols-3 gap-2">
                       <Input
                         placeholder="Altura"
@@ -475,7 +627,7 @@ export default function App() {
                     value={formData.brand}
                     onChange={(e) => handleInputChange('brand', e.target.value)}
                     options={[
-                      { value: 'mobili', label: 'Mobili Estofados' },
+                      { value: 'mobili', label: 'BETEL INTERIORES' },
                       { value: 'outras', label: 'Outras marcas' }
                     ]}
                   />

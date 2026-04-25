@@ -3,11 +3,17 @@ import { Upload, X, Plus } from 'lucide-react';
 
 interface ImageUploadProps {
   label?: string;
+  initialImages?: { src: string; alt: string }[];
   onImagesChange?: (files: File[]) => void;
 }
 
-export function ImageUpload({ label, onImagesChange }: ImageUploadProps) {
-  const [images, setImages] = useState<{ file: File; preview: string }[]>([]);
+export function ImageUpload({ label, initialImages = [], onImagesChange }: ImageUploadProps) {
+  const [images, setImages] = useState<{ file?: File; preview: string; alt: string }[]>(
+    initialImages.map((image) => ({
+      preview: image.src,
+      alt: image.alt
+    }))
+  );
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -18,12 +24,13 @@ export function ImageUpload({ label, onImagesChange }: ImageUploadProps) {
       .filter(file => file.type.startsWith('image/'))
       .map(file => ({
         file,
-        preview: URL.createObjectURL(file)
+        preview: URL.createObjectURL(file),
+        alt: file.name
       }));
 
     const updatedImages = [...images, ...newImages];
     setImages(updatedImages);
-    onImagesChange?.(updatedImages.map(img => img.file));
+    onImagesChange?.(updatedImages.flatMap(img => img.file ? [img.file] : []));
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -48,13 +55,13 @@ export function ImageUpload({ label, onImagesChange }: ImageUploadProps) {
   const handleRemove = (index: number) => {
     const updatedImages = images.filter((_, i) => i !== index);
     setImages(updatedImages);
-    onImagesChange?.(updatedImages.map(img => img.file));
+    onImagesChange?.(updatedImages.flatMap(img => img.file ? [img.file] : []));
   };
 
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm text-neutral-700 mb-2">{label}</label>
+        <label className="block text-sm text-[var(--premium-coffee)] mb-2">{label}</label>
       )}
 
       {images.length === 0 ? (
@@ -67,16 +74,16 @@ export function ImageUpload({ label, onImagesChange }: ImageUploadProps) {
             border-2 border-dashed rounded-lg p-8 text-center cursor-pointer
             transition-colors
             ${isDragging
-              ? 'border-[#B89B7C] bg-[#B89B7C]/5'
-              : 'border-neutral-300 hover:border-[#B89B7C] hover:bg-neutral-50'
+              ? 'border-[var(--primary)] bg-[var(--premium-surface-raised)]'
+              : 'border-[var(--color-input)] bg-[var(--premium-surface-soft)] hover:border-[var(--primary)] hover:bg-[var(--premium-surface-raised)]'
             }
           `}
         >
-          <Upload className="w-10 h-10 text-neutral-400 mx-auto mb-3" />
-          <p className="text-sm text-neutral-700 mb-1">
+          <Upload className="w-10 h-10 text-[var(--premium-coffee)] mx-auto mb-3" />
+          <p className="text-sm text-[var(--color-foreground)] mb-1">
             Arraste e solte ou clique para selecionar
           </p>
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs text-[var(--color-muted-foreground)]">
             PNG, JPG ou WEBP até 5MB
           </p>
           <input
@@ -92,10 +99,10 @@ export function ImageUpload({ label, onImagesChange }: ImageUploadProps) {
         <div>
           <div className="grid grid-cols-4 gap-3 mb-3">
             {images.map((image, index) => (
-              <div key={index} className="relative aspect-square rounded-lg overflow-hidden bg-neutral-100 group">
+              <div key={index} className="relative aspect-square rounded-lg overflow-hidden bg-[var(--premium-surface-deep)] border border-[var(--color-border)] group shadow-[0_8px_18px_rgba(74,52,43,0.10)]">
                 <img
                   src={image.preview}
-                  alt={`Upload ${index + 1}`}
+                  alt={image.alt || `Imagem ${index + 1} do produto`}
                   className="w-full h-full object-cover"
                 />
                 <button
@@ -115,7 +122,7 @@ export function ImageUpload({ label, onImagesChange }: ImageUploadProps) {
 
           <button
             onClick={handleClick}
-            className="w-full flex items-center justify-center gap-2 py-2.5 border border-neutral-300 rounded-lg text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-2.5 border border-[var(--color-border)] rounded-lg text-sm text-[var(--premium-coffee)] bg-[var(--premium-surface-soft)] hover:bg-[var(--premium-surface-deep)] hover:border-[var(--premium-gold-soft)] transition-colors"
           >
             <Plus className="w-4 h-4" />
             Adicionar imagem
@@ -131,7 +138,7 @@ export function ImageUpload({ label, onImagesChange }: ImageUploadProps) {
         </div>
       )}
 
-      <p className="mt-2 text-xs text-neutral-500">
+      <p className="mt-2 text-xs text-[var(--color-muted-foreground)]">
         Essa será a imagem exibida na listagem e vitrine.
       </p>
     </div>

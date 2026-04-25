@@ -30,11 +30,11 @@ const menuItems = [
 
 export function Sidebar({ activeItem = 'products' }: SidebarProps) {
   return (
-    <aside className="fixed left-0 top-0 h-screen w-56 border-r border-neutral-200 bg-neutral-50 flex flex-col z-40">
-      <div className="p-6 border-b border-neutral-200">
+    <aside className="fixed left-0 top-0 h-screen w-56 border-r border-[var(--sidebar-border)] bg-[var(--sidebar)] flex flex-col z-40 shadow-[8px_0_26px_rgba(74,52,43,0.08)]">
+      <div className="p-6 border-b border-[var(--sidebar-border)]">
         <div className="flex flex-col gap-1">
-          <h1 className="text-xl tracking-tight text-neutral-900">MOBILI</h1>
-          <p className="text-xs text-neutral-500 tracking-wide">ESTOFADOS</p>
+          <h1 className="text-xl tracking-tight text-[var(--sidebar-foreground)]">BETEL</h1>
+          <p className="text-xs text-[var(--color-muted-foreground)] tracking-wide">INTERIORES</p>
         </div>
       </div>
 
@@ -50,8 +50,8 @@ export function Sidebar({ activeItem = 'products' }: SidebarProps) {
                   className={`
                     w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors
                     ${isActive
-                      ? 'bg-white text-neutral-900 shadow-sm'
-                      : 'text-neutral-600 hover:bg-white/50 hover:text-neutral-900'
+                      ? 'bg-[var(--premium-surface-raised)] text-[var(--color-foreground)] shadow-sm'
+                      : 'text-[var(--color-muted-foreground)] hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]'
                     }
                   `}
                 >
@@ -64,13 +64,13 @@ export function Sidebar({ activeItem = 'products' }: SidebarProps) {
         </ul>
       </nav>
 
-      <div className="p-4 border-t border-neutral-200">
-        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-white/50 hover:text-neutral-900 transition-colors">
+      <div className="p-4 border-t border-[var(--sidebar-border)]">
+        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--color-muted-foreground)] hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)] transition-colors">
           <HelpCircle className="w-4 h-4 flex-shrink-0" />
           <span className="text-sm">Precisa de ajuda?</span>
         </button>
-        <p className="mt-4 px-3 text-xs text-neutral-400">
-          © 2026 Mobili Estofados<br />
+        <p className="mt-4 px-3 text-xs text-[var(--color-muted-foreground)]">
+          © 2026 BETEL INTERIORES<br />
           Todos os direitos reservados.
         </p>
       </div>

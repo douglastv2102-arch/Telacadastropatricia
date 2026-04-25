@@ -11,10 +11,10 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
       <label className="flex items-start justify-between cursor-pointer group">
         <div className="flex-1 mr-4">
           {label && (
-            <span className="block text-sm text-neutral-900">{label}</span>
+            <span className="block text-sm text-[var(--color-foreground)]">{label}</span>
           )}
           {description && (
-            <span className="block text-xs text-neutral-500 mt-0.5">{description}</span>
+            <span className="block text-xs text-[var(--color-muted-foreground)] mt-0.5">{description}</span>
           )}
         </div>
 
@@ -27,17 +27,17 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
           />
           <div className="
             w-11 h-6 rounded-full
-            bg-neutral-300
-            peer-checked:bg-[#B89B7C]
-            peer-focus:ring-2 peer-focus:ring-[#B89B7C]/20
-            group-hover:bg-neutral-400
-            peer-checked:group-hover:bg-[#A68A6B]
+            bg-[var(--premium-surface-deep)]
+            peer-checked:bg-[var(--primary)]
+            peer-focus:ring-2 peer-focus:ring-[var(--primary)]/20
+            group-hover:bg-[var(--color-input)]
+            peer-checked:group-hover:bg-[var(--premium-terracotta-hover)]
             transition-all duration-200
             relative
           ">
             <div className="
               absolute top-0.5 left-0.5
-              w-5 h-5 rounded-full bg-white shadow-sm
+              w-5 h-5 rounded-full bg-[var(--premium-surface-raised)] shadow-sm
               peer-checked:translate-x-5
               transition-transform duration-200
             " />

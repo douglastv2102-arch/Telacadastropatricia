@@ -37,11 +37,11 @@ export function RichTextEditor({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm text-neutral-700 mb-2">{label}</label>
+        <label className="block text-sm text-[var(--premium-coffee)] mb-2">{label}</label>
       )}
 
-      <div className="border border-neutral-300 rounded-lg overflow-hidden bg-white focus-within:ring-2 focus-within:ring-[#B89B7C]/20 focus-within:border-[#B89B7C]">
-        <div className="flex items-center gap-1 px-3 py-2 border-b border-neutral-200 bg-neutral-50">
+      <div className="border border-[var(--color-input)] rounded-lg overflow-hidden bg-[var(--color-input-background)] shadow-[inset_0_1px_2px_rgba(74,52,43,0.06)] focus-within:ring-2 focus-within:ring-[var(--primary)]/20 focus-within:border-[var(--primary)]">
+        <div className="flex items-center gap-1 px-3 py-2 border-b border-[var(--color-border)] bg-[var(--premium-surface-soft)]">
           {toolbarButtons.map((btn, idx) => {
             const Icon = btn.icon;
             return (
@@ -49,7 +49,7 @@ export function RichTextEditor({
                 key={idx}
                 type="button"
                 title={btn.label}
-                className="p-1.5 rounded hover:bg-white hover:text-neutral-900 text-neutral-600 transition-colors"
+                className="p-1.5 rounded hover:bg-[var(--premium-surface-raised)] hover:text-[var(--color-foreground)] text-[var(--color-muted-foreground)] transition-colors"
               >
                 <Icon className="w-4 h-4" />
               </button>
@@ -61,13 +61,13 @@ export function RichTextEditor({
           value={value}
           onChange={handleChange}
           placeholder={placeholder}
-          className="w-full px-3 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none resize-none min-h-[120px]"
+          className="w-full px-3 py-3 text-sm text-[var(--color-foreground)] bg-transparent placeholder:text-[#9b8b7c] focus:outline-none resize-none min-h-[120px]"
         />
       </div>
 
       {maxCharacters && (
         <div className="flex justify-end mt-1.5">
-          <p className="text-xs text-neutral-400">
+          <p className="text-xs text-[var(--color-muted-foreground)]">
             {charCount}/{maxCharacters}
           </p>
         </div>

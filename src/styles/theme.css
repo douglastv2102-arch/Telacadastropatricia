@@ -1,81 +1,147 @@
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --font-size: 16px;
-  --background: #ffffff;
-  --foreground: oklch(0.145 0 0);
-  --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: #030213;
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
-  --muted: #ececf0;
-  --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
-  --destructive: #d4183d;
+
+  /* Alta Estação 2026 — Premium Furniture Palette */
+  --background: #efe3d6;
+  --foreground: #2d2722;
+
+  --card: #f8efe4;
+  --card-foreground: #2d2722;
+
+  --popover: #f8efe4;
+  --popover-foreground: #2d2722;
+
+  /* Primary: terracota sofisticado */
+  --primary: #a65a3a;
+  --primary-foreground: #fffaf5;
+
+  /* Secondary: areia / linho */
+  --secondary: #dcc9b6;
+  --secondary-foreground: #3a312b;
+
+  --muted: #e2d4c4;
+  --muted-foreground: #6d6259;
+
+  /* Accent: oliva elegante */
+  --accent: #7a8b5b;
+  --accent-foreground: #fffaf5;
+
+  --destructive: #b9473d;
   --destructive-foreground: #ffffff;
-  --border: rgba(0, 0, 0, 0.1);
-  --input: transparent;
-  --input-background: #f3f3f5;
-  --switch-background: #cbced4;
+
+  --border: #d3c1ae;
+  --input: #cdb8a4;
+  --input-background: #f4eadf;
+
+  --switch-background: #c9b8a8;
+
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: #030213;
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  --ring: #a65a3a;
+
+  /* Charts / status colors */
+  --chart-1: #a65a3a;
+  --chart-2: #7a8b5b;
+  --chart-3: #c09a6b;
+  --chart-4: #7b4b3a;
+  --chart-5: #d7b98e;
+
+  --radius: 0.875rem;
+
+  /* Sidebar */
+  --sidebar: #e4d5c6;
+  --sidebar-foreground: #3a312b;
+  --sidebar-primary: #a65a3a;
+  --sidebar-primary-foreground: #fffaf5;
+  --sidebar-accent: #d8c5b2;
+  --sidebar-accent-foreground: #8c4a2f;
+  --sidebar-border: #cdb8a4;
+  --sidebar-ring: #a65a3a;
+
+  /* Extra tokens para usarmos nos próximos componentes */
+  --premium-surface: #f8efe4;
+  --premium-surface-raised: #fcf6ee;
+  --premium-surface-soft: #eadccd;
+  --premium-surface-deep: #dfcdbb;
+  --premium-brown: #4a342b;
+  --premium-coffee: #6f4435;
+  --premium-terracotta: #a65a3a;
+  --premium-terracotta-hover: #8c4a2f;
+  --premium-olive: #7a8b5b;
+  --premium-gold-soft: #c09a6b;
+  --premium-shadow: 0 22px 52px rgba(74, 52, 43, 0.16);
+  --premium-shadow-soft: 0 12px 28px rgba(74, 52, 43, 0.11);
+  --premium-inset: inset 0 1px 0 rgba(255, 250, 245, 0.58);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
+  --background: #1f1a17;
+  --foreground: #f8efe6;
+
+  --card: #2a231f;
+  --card-foreground: #f8efe6;
+
+  --popover: #2a231f;
+  --popover-foreground: #f8efe6;
+
+  --primary: #d0845e;
+  --primary-foreground: #1f1a17;
+
+  --secondary: #3a312b;
+  --secondary-foreground: #f8efe6;
+
+  --muted: #332b26;
+  --muted-foreground: #cbbdaf;
+
+  --accent: #9aaa78;
+  --accent-foreground: #1f1a17;
+
+  --destructive: #e56b61;
+  --destructive-foreground: #ffffff;
+
+  --border: #4a4038;
+  --input: #4a4038;
+  --input-background: #2f2823;
+
+  --switch-background: #5b4b42;
+
+  --ring: #d0845e;
+
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
+
+  --chart-1: #d0845e;
+  --chart-2: #9aaa78;
+  --chart-3: #d7b98e;
+  --chart-4: #b06f55;
+  --chart-5: #ead0a5;
+
+  --sidebar: #241e1a;
+  --sidebar-foreground: #f8efe6;
+  --sidebar-primary: #d0845e;
+  --sidebar-primary-foreground: #1f1a17;
+  --sidebar-accent: #332b26;
+  --sidebar-accent-foreground: #f8efe6;
+  --sidebar-border: #4a4038;
+  --sidebar-ring: #d0845e;
+
+  --premium-surface: #2a231f;
+  --premium-surface-raised: #342b26;
+  --premium-surface-soft: #332b26;
+  --premium-surface-deep: #241e1a;
+  --premium-brown: #f8efe6;
+  --premium-coffee: #d7b98e;
+  --premium-terracotta: #d0845e;
+  --premium-terracotta-hover: #e19a76;
+  --premium-olive: #9aaa78;
+  --premium-gold-soft: #d7b98e;
+  --premium-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+  --premium-shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.18);
+  --premium-inset: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 @theme inline {
@@ -105,10 +171,12 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -124,35 +192,34 @@
     @apply border-border outline-ring/50;
   }
 
-  body {
-    @apply bg-background text-foreground;
-  }
-
-  /**
-  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
-  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
-  */
-
   html {
     font-size: var(--font-size);
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
   }
 
   h1 {
     font-size: var(--text-2xl);
     font-weight: var(--font-weight-medium);
-    line-height: 1.5;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
   }
 
   h2 {
     font-size: var(--text-xl);
     font-weight: var(--font-weight-medium);
-    line-height: 1.5;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
   }
 
   h3 {
     font-size: var(--text-lg);
     font-weight: var(--font-weight-medium);
-    line-height: 1.5;
+    line-height: 1.4;
   }
 
   h4 {
@@ -162,21 +229,36 @@
   }
 
   label {
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
     font-weight: var(--font-weight-medium);
     line-height: 1.5;
+    color: var(--premium-coffee);
   }
 
   button {
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
     font-weight: var(--font-weight-medium);
     line-height: 1.5;
   }
 
-  input {
-    font-size: var(--text-base);
+  input,
+  textarea,
+  select {
+    font-size: var(--text-sm);
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #a99b90;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(166, 90, 58, 0.12);
   }
 
   @keyframes slide-in {
